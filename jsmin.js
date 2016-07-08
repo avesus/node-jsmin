@@ -61,11 +61,17 @@ String.prototype.has = function(c) {
 };
 
 exports.jsmin = jsmin;
-function jsmin(input, level, comment) {
+function jsmin (input, level, onNewPart) {
 
   if (!input) return '';
   if (!level) level = 2;
-  if (!comment) comment = '';
+
+  if (! onNewPart) {
+
+    onNewPart = function _onNewPart () {
+      };
+  }
+  
 
   var a = '',
         b = '',
@@ -91,6 +97,7 @@ function jsmin(input, level, comment) {
   */
 
   var iChar = 0, lInput = input.length;
+
   function getc() {
 
     var c = theLookahead;
@@ -110,6 +117,7 @@ function jsmin(input, level, comment) {
     }
     return ' ';
   }
+
   function getcIC() {
     var c = theLookahead;
     if(iChar == lInput) {
@@ -210,8 +218,11 @@ function jsmin(input, level, comment) {
   action recognizes a regular expression if it is preceded by ( or , or =.
   */
 
-  function action(d) {
+  function action (d) {
 
+    var iCharBeforeAction = iChar;
+
+    // This will be concatenated into returned string
     var r = [];
 
     if(d == 1) {
@@ -258,7 +269,13 @@ function jsmin(input, level, comment) {
       b = next();
     }
 
-    return r.join('');
+    var returnString = r.join('');
+
+    if (returnString !== '') {
+      console.log(iCharBeforeAction, returnString);
+    }
+
+    return returnString;
   }
 
 
@@ -271,6 +288,7 @@ function jsmin(input, level, comment) {
 
   function m() {
 
+    // Minifed code parts array. Joined as return value
     var r = [];
     a = '';
 
@@ -285,6 +303,7 @@ function jsmin(input, level, comment) {
             r.push(action(2));
           }
           break;
+
         case '\n':
           switch(b) {
             case '{':
@@ -309,6 +328,7 @@ function jsmin(input, level, comment) {
               }
           }
           break;
+
         default:
           switch(b) {
             case ' ':
@@ -355,11 +375,6 @@ function jsmin(input, level, comment) {
     return r.join('');
   }
 
-  ret = m(input);
-
-  if (comment) {
-    return comment + '\n' + ret;
-  }
-  return ret;
+  return m(input);
 }
 

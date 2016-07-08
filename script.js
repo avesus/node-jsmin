@@ -1,0 +1,2 @@
+'use strict';var variable1='Hello here!';console.log(variable1);var foo=function foo(whatHere){console.log(whatHere);};foo('Here are we');var bar=foo;bar('e');
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzY3JpcHQuanMiLCJzb3VyY2VSb290IjoiaHR0cDovL2V4YW1wbGUuY29tL2FwcC9qcy8ifQ==
